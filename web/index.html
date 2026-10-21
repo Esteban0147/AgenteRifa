@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Simulador de chat para probar el agente de rifas con OpenAI."
+    />
+    <title>Rifa chat — Simulador</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/chat.css" />
+    <script src="/static/chat.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Panel del simulador">
+        <a class="brand" href="/" aria-label="Rifa chat, inicio">
+          <span class="brand-icon" aria-hidden="true">r</span>
+          <span>rifa<span class="brand-light">chat</span></span>
+        </a>
+
+        <div class="workspace-label">ESPACIO DE TRABAJO</div>
+        <div class="workspace-card">
+          <span class="workspace-avatar" aria-hidden="true">R</span>
+          <span class="workspace-copy">
+            <strong>Rifas demo</strong>
+            <small>Entorno de pruebas</small>
+          </span>
+          <span class="workspace-menu" aria-hidden="true">···</span>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="section-heading">
+            <span>CONVERSACIONES</span>
+            <span class="conversation-count">1</span>
+          </div>
+          <button class="conversation-item active" type="button">
+            <span class="contact-avatar" aria-hidden="true">T</span>
+            <span class="conversation-copy">
+              <span class="conversation-name">Tú <span>ahora</span></span>
+              <span class="conversation-preview">Prueba tu agente aquí</span>
+            </span>
+            <span class="online-dot" aria-label="Conversación activa"></span>
+          </button>
+        </div>
+
+        <div class="sidebar-bottom">
+          <div class="demo-note">
+            <span class="note-icon" aria-hidden="true">i</span>
+            <p>
+              <strong>Modo demostración</strong>
+              Los mensajes no se envían por WhatsApp.
+            </p>
+          </div>
+          <div class="profile">
+            <span class="profile-avatar" aria-hidden="true">T</span>
+            <span><strong>Probador</strong><small>Sesión local</small></span>
+            <span class="workspace-menu" aria-hidden="true">···</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat-panel" aria-label="Chat de prueba">
+        <header class="chat-header">
+          <div class="contact-avatar header-avatar" aria-hidden="true">R</div>
+          <div class="header-copy">
+            <h1>Asistente de rifas</h1>
+            <p><span class="online-dot"></span> Agente de IA <span class="header-divider">·</span> simulación</p>
+          </div>
+          <span class="openai-pill"><span aria-hidden="true">✳</span> OpenAI</span>
+          <button class="reset-button" id="reset-chat" type="button" title="Reiniciar conversación">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3.3 9a6.8 6.8 0 1 1 .5 3.5M3.3 4.4V9h4.6" />
+            </svg>
+            <span>Reiniciar</span>
+          </button>
+        </header>
+
+        <section class="safety-banner" aria-label="Aviso de simulación">
+          <span aria-hidden="true">✳</span>
+          <p><strong>Demo:</strong> Bonanza crea boletos reales tras un pago ficticio de prueba. No se confirma ningún pago real y el chat no envía WhatsApp.</p>
+        </section>
+
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="date-divider"><span>HOY</span></div>
+          <div class="message-row incoming">
+            <div class="bot-avatar" aria-hidden="true">R</div>
+            <div class="message-content">
+              <div class="message-bubble">
+                <p>¡Hola! 👋 Puedo ayudarte a crear un boleto Bonanza de 2 cifras, entre $0.50 y $6.00.</p>
+                <p>La validación del banco es ficticia; el boleto sí se crea en Bonanza.</p>
+              </div>
+              <span class="message-time">Asistente · ahora</span>
+            </div>
+          </div>
+          <div class="quick-prompts" aria-label="Mensajes sugeridos">
+            <span class="quick-label">PRUEBA CON</span>
+            <button type="button" data-prompt="Quiero un boleto de $1.50 con el número 07">Comprar boleto</button>
+            <button type="button" data-prompt="Quiero un boleto de 2 cifras">Elegir número</button>
+          </div>
+          <div class="typing-row" id="typing-indicator" hidden>
+            <span class="bot-avatar" aria-hidden="true">R</span>
+            <span class="typing-bubble" aria-label="El asistente está escribiendo">
+              <i></i><i></i><i></i>
+            </span>
+            <span class="typing-label">El asistente está escribiendo</span>
+          </div>
+        </div>
+
+        <footer class="composer-area">
+          <div class="composer-card">
+            <label class="sr-only" for="message-input">Escribe un mensaje</label>
+            <textarea
+              id="message-input"
+              rows="1"
+              maxlength="4000"
+              placeholder="Escribe un mensaje..."
+              autocomplete="off"
+            ></textarea>
+            <div class="composer-actions">
+              <button class="attachment-button" id="receipt-button" type="button">
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M7.2 10.8 12.6 5.4a3 3 0 0 1 4.2 4.2l-7.1 7.1a5 5 0 0 1-7.1-7.1l7-7" />
+                </svg>
+                <span>Comprobante demo</span>
+              </button>
+              <span class="composer-hint">Enter para enviar <kbd>↵</kbd></span>
+              <button class="send-button" id="send-button" type="button" aria-label="Enviar mensaje">
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="m17.2 2.8-5.1 14.4-2.7-6.6-6.6-2.7 14.4-5.1ZM9.4 10.6l7.8-7.8" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <p class="footer-caption">Experiencia de prueba · No es un canal oficial de WhatsApp</p>
+        </footer>
+      </section>
+    </main>
+
+    <dialog class="receipt-dialog" id="receipt-dialog">
+      <form id="receipt-form">
+        <div class="dialog-heading">
+          <div>
+            <span class="dialog-eyebrow">SIMULACIÓN</span>
+            <h2>Adjuntar comprobante</h2>
+          </div>
+          <button class="dialog-close" id="close-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <p class="dialog-description">
+          Ingresa datos ficticios para probar la validación. No se carga ni analiza ninguna imagen real.
+        </p>
+        <label for="receipt-reference">Referencia de prueba</label>
+        <input id="receipt-reference" name="reference" required maxlength="80" placeholder="DEMO-..." />
+        <small class="reference-hint" id="reference-hint">Aparta un número primero para ver tu referencia.</small>
+        <div class="form-row">
+          <div>
+            <label for="receipt-amount">Monto (dólares)</label>
+            <input id="receipt-amount" name="amount" required inputmode="decimal" placeholder="Igual al valor del boleto" />
+            <small class="reference-hint" id="receipt-amount-hint">El comprobante debe coincidir con el valor del boleto.</small>
+          </div>
+          <div>
+            <label for="receipt-date">Fecha</label>
+            <input id="receipt-date" name="date" required type="date" />
+          </div>
+        </div>
+        <div class="dialog-warning"><span aria-hidden="true">!</span> Datos completamente simulados. No hagas una transferencia.</div>
+        <button class="attach-submit" type="submit">Enviar comprobante de prueba</button>
+      </form>
+    </dialog>
+  </body>
+</html>
